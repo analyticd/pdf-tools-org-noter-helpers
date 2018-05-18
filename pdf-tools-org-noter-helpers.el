@@ -31,18 +31,16 @@
                  (filename-non-directory (file-name-nondirectory book-filename))
                  (filename (first (split-string filename-non-directory "\\\.")))
                  (noter-filepath (concatenate 'string org-directory "/" filename "-notes" ".org")))
-            (if (not (file-exists-p noter-filepath))
-                (progn
-                  (with-temp-buffer (find-file noter-filepath)
-                                    (delay-mode-hooks
-                                      (point-min)
-                                      (org-insert-heading)
-                                      (insert (format " %s\n" filename))
-                                      (org-set-property "NOTER_DOCUMENT" book-filename)
-                                      (save-buffer)
-                                      (org-noter)))
-                  (call-interactively 'bookmark-jump))
-              (error "org-noter document for this book already exists; not creating one.")))))
+            (with-temp-buffer (find-file noter-filepath)
+                              (when (not (file-exists-p noter-filepath))
+                                (delay-mode-hooks
+                                  (point-min)
+                                  (org-insert-heading)
+                                  (insert (format " %s\n" filename))
+                                  (org-set-property "NOTER_DOCUMENT" book-filename)
+                                  (save-buffer)))
+                              (org-noter))
+            (call-interactively 'bookmark-jump))))
     (error "Must be in \"PDFView\" mode to use this function.")))
 
 (provide 'pdf-tools-org-noter-helpers)
