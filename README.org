@@ -1,0 +1,33 @@
+
+* pdf-tools-org-noter-helpers
+** Description
+Provide helpers to make using =org-noter= with =pdf-tools= easier and more efficient
+for the case where you start by opening the book (instead of starting by opening
+the =org-noter= noter document associated with the book) and then want to start
+taking notes.
+** Configuration
+If you use =use-package= package, then something like the following will work.
+
+#+begin_src emacs-lisp
+(use-package pdf-tools-org-noter-helpers
+  :pin manual
+  :load-path "/path/to/pdf-tools-org-noter-helpers/directory")
+#+end_src
+
+** Usage
+1. Say you've opened a PDF book using =pdf-view-mode=.
+2. While reading, you decide that you would like to take notes on what you are reading.
+3. Do =M-x pdf-noter-create-notes-file-for-current-book=.
+   This will 
+   a) ask if you want to create a bookmark where you are currently reading in
+   the book, i.e., the location of point/cursor in the current =PDFView= buffer,
+   b) check if the noter document file already exists (if it does it will tell
+   you so and stop) and if not,
+   c) then it will create an =org-noter= document located in your =org-directory=
+   (=C-h v org-directory= to see value of this variable) location and having the
+   same name as the book's PDF file sans file suffix and with "-notes.org"
+   appended.
+4. Once =org-noter= finishes loading your book and notes in its split view, you can
+   then jump to the bookmark you set earlier (via =M-x bookmark-jump=).
+5. From here you can start taking notes as per usual =org-noter= usage.
+** License: MIT
