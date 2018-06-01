@@ -20,7 +20,7 @@
 ;; SOFTWARE.
 
 ;;;###autoload
-(defun pdf-noter-create-notes-file-for-current-book ()
+(defun org-noter-create-notes-file-for-current-book ()
   "Create the org-noter file based on the PDF file name for the current buffer."
   (interactive)
   (if (eq major-mode 'pdf-view-mode)    ; TODO This should be made to work with nov.el for epub books too.
