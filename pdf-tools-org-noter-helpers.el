@@ -29,7 +29,9 @@
         (save-excursion
           (let* ((book-filename buffer-file-name)
                  (filename-non-directory (file-name-nondirectory book-filename))
-                 (filename (first (split-string filename-non-directory "\\\.")))
+                 (filename (replace-regexp-in-string
+                            " " "-"
+                            (first (split-string filename-non-directory "\\\."))))
                  (noter-filepath (concatenate 'string org-directory "/" filename "-notes" ".org")))
             (with-temp-buffer (find-file noter-filepath)
                               (when (not (file-exists-p noter-filepath))
