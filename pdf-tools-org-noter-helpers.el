@@ -23,27 +23,24 @@
 (defun org-noter-create-notes-file-for-current-book ()
   "Create the org-noter file based on the PDF file name for the current buffer."
   (interactive)
-  (if (eq major-mode 'pdf-view-mode)    ; TODO This should be made to work with nov.el for epub books too.
-      (progn
-        (call-interactively 'bookmark-set)
-        (save-excursion
-          (let* ((book-filename buffer-file-name)
-                 (filename-non-directory (file-name-nondirectory book-filename))
-                 (filename (replace-regexp-in-string
-                            " " "-"
-                            (first (split-string filename-non-directory "\\\."))))
-                 (noter-filepath (concatenate 'string org-directory "/" filename "-notes" ".org")))
-            (with-temp-buffer (find-file noter-filepath)
-                              (if (not (file-exists-p noter-filepath))
-                                (delay-mode-hooks
-                                  (point-min)
-                                  (org-insert-heading)
-                                  (insert (format " %s\n" filename))
-                                  (org-set-property "NOTER_DOCUMENT" book-filename)
-                                  (save-buffer))
-                                (find-file noter-filepath))
-                              (org-noter))
-            (call-interactively 'bookmark-jump))))
-    (error "Must be in \"PDFView\" mode to use this function.")))
+  (call-interactively 'bookmark-set)
+  (save-excursion
+    (let* ((book-filename buffer-file-name)
+           (filename-non-directory (file-name-nondirectory book-filename))
+           (filename (replace-regexp-in-string
+                      " " "-"
+                      (first (split-string filename-non-directory "\\\."))))
+           (noter-filepath (concatenate 'string org-directory "/" filename "-notes" ".org")))
+      (with-temp-buffer (find-file noter-filepath)
+                        (if (not (file-exists-p noter-filepath))
+                            (delay-mode-hooks
+                              (point-min)
+                              (org-insert-heading)
+                              (insert (format " %s\n" filename))
+                              (org-set-property "NOTER_DOCUMENT" book-filename)
+                              (save-buffer))
+                          (find-file noter-filepath))
+                        (org-noter))
+      (call-interactively 'bookmark-jump))))
 
 (provide 'pdf-tools-org-noter-helpers)
